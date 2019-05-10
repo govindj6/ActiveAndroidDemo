@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnSave, btnDisplay, btnUpdate;
+    Button btnSave, btnDisplay, btnUpdate, btnDelete;
     EditText etName,etAddress;
     ListView lv;
     ArrayList<Employee> arrayList;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         etName = findViewById(R.id.etName);
         etAddress= findViewById(R.id.etAddress);
         btnUpdate = findViewById(R.id.btnUpdate);
+        btnDelete = findViewById(R.id.btnDelete);
 
         arrayList = new ArrayList<>();
         adapter = new EmployeeAdapter(MainActivity.this, arrayList);
@@ -96,6 +98,19 @@ public class MainActivity extends AppCompatActivity {
                                     });
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
+                }
+            }
+        });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (etName.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(MainActivity.this, "Please enter name, which you want to delete", Toast.LENGTH_SHORT).show();
+                } else {
+                    new Delete().from(Employee.class).where("name = ?", etName.getText().toString()).execute();
+                    Toast.makeText(MainActivity.this, etName.getText().toString() + " is deleted", Toast.LENGTH_SHORT).show();
+                    etName.getText().clear();
                 }
             }
         });
